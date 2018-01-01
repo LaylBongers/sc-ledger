@@ -5,7 +5,7 @@
         <div class="card-body">
             <div class="form-group">
                 <label>Location</label>
-                <input type="text" class="form-control"></input>
+                <input type="text" class="form-control" v-model="priceLog.location"></input>
             </div>
 
             <table class="table">
@@ -18,23 +18,22 @@
                     </tr>
                 </thead>
                 <tbody>
-                    <tr v-for="change in priceLog.changes">
+                    <tr v-for="(change, index) in priceLog.changes">
                         <td>{{ change.resource }}</td>
                         <td>{{ change.buy }}</td>
                         <td>{{ change.sell }}</td>
-                            <td><button class="btn btn-danger" style="width: 2.4em;">-</button></td>
+                        <td><button class="btn btn-danger" style="width: 2.4em;" @click="removeChange(index)">-</button></td>
                     </tr>
                     <tr>
-                        <td><input type="text" class="form-control"></input></td>
-                        <td><input type="text" class="form-control"></input></td>
-                        <td><input type="text" class="form-control"></input></td>
-                            <td><button class="btn btn-success" style="width: 2.4em;">+</button></td>
+                        <td><input type="text" class="form-control" v-model="workingChange.resource"></input></td>
+                        <td><input type="number" class="form-control" v-model="workingChange.buy"></input></td>
+                        <td><input type="number" class="form-control" v-model="workingChange.sell"></input></td>
+                        <td><button class="btn btn-success" style="width: 2.4em;" @click="addChange">+</button></td>
                     </tr>
                 </tbody>
             </table>
 
-            <button type="submit" class="btn btn-primary" v-on:click="submitPricelog">Submit Price Log</button>
-            <p>{{ submittedText }}</p>
+            <button type="submit" class="btn btn-primary" @click="submitPriceLog">Submit Price Log</button>
         </div>
     </div>
 </div>
@@ -45,9 +44,38 @@ export default {
     name: 'add-price-log',
     data () {
         return {
-            priceLog: {
-                timestamp: new Date(),
-                location: 'Port Olisar',
+            priceLog: this.createEmptyPriceLog(),
+            workingChange: this.createEmptyWorkingChange(),
+        }
+    },
+    methods: {
+        submitPriceLog () {
+            this.priceLog.timestamp = new Date()
+
+            this.$emit('submitted', this.priceLog)
+
+            this.priceLog = this.createEmptyPriceLog()
+            this.workingChange = this.createEmptyWorkingChange()
+        },
+        addChange () {
+            if (this.workingChange.buy === '') {
+                this.workingChange.buy = null
+            }
+            if (this.workingChange.sell === '') {
+                this.workingChange.sell = null
+            }
+
+            this.priceLog.changes.push(this.workingChange)
+
+            this.workingChange = this.createEmptyWorkingChange()
+        },
+        removeChange (index) {
+            this.priceLog.changes.splice(index, 1)
+        },
+        createEmptyPriceLog () {
+            return {
+                timestamp: null,
+                location: '',
                 changes: [
                     {
                         resource: 'Hydrogen',
@@ -55,14 +83,15 @@ export default {
                         sell: null,
                     },
                 ],
-            },
-            submittedText: 'Not Submitted',
-        }
-    },
-    methods: {
-        submitPricelog () {
-            this.submittedText = 'Submitted'
-        }
+            }
+        },
+        createEmptyWorkingChange () {
+            return {
+                resource: '',
+                buy: '',
+                sell: '',
+            }
+        },
     },
 }
 </script>

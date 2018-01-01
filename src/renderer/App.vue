@@ -1,10 +1,10 @@
 <template>
 <div id="app">
     <div class="container-fluid text-light">
-        <AddPriceLog />
+        <AddPriceLog @submitted="priceLogSubmitted" />
 
         <h2 class="mt-3">Price Logs</h2>
-        <div v-for="log in priceLogs">
+        <div v-for="log in priceLogs.slice().reverse()">
             <h3>{{ log.location }} at {{ log.timestamp.toUTCString() }}</h3>
             <table class="table">
                 <thead>
@@ -52,6 +52,11 @@ export default {
             ],
         }
     },
+    methods: {
+        priceLogSubmitted (priceLog) {
+            this.priceLogs.push(priceLog)
+        }
+    }
 }
 </script>
 
