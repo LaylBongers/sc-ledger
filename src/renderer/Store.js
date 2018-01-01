@@ -10,7 +10,7 @@ class Store {
         // Create the folder just in case
         fs.mkdir(appDataDir, function (error) {
             // Already exists is an error we expect to happen
-            if (error.code !== 'EEXIST') {
+            if (error && error.code !== 'EEXIST') {
                 console.error(error)
             }
         })
@@ -19,14 +19,21 @@ class Store {
     }
 
     load (callback) {
-        fs.readFile(this.targetPath, (err, data) => {
+        let me = this
+        let targetPath = this.targetPath
+
+        fs.readFile(targetPath, (err, data) => {
             if (err) {
-                // Couldn't read, nothing to do here
-                console.log('Could not read locations data')
+                // Couldn't read the file, use the seed data instead and write
+                // that to a new file
+                let locations = require('./SeedLocations.json')
+                me.save(locations)
+                callback(null, locations)
                 return
             }
 
             let locations = JSON.parse(data)
+            console.log('Loaded locations from ' + targetPath)
             callback(null, locations)
         })
     }

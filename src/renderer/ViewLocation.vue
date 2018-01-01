@@ -34,14 +34,16 @@
                         <th scope="col">Resource</th>
                         <th scope="col">Buy</th>
                         <th scope="col">Sell</th>
+                        <th scope="col"></th>
                     </tr>
                 </thead>
                 <tbody>
-                    <tr v-for="change in selectedLocation.priceChanges">
+                    <tr v-for="(change, index) in selectedLocation.priceChanges">
                         <td><timeago :since="change.timestamp" /></td>
                         <td>{{ change.resource }}</td>
                         <td>{{ change.buy }}</td>
                         <td>{{ change.sell }}</td>
+                        <td><button class="btn btn-danger btn-sm" @click="priceRemoved(index)">-</button></td>
                     </tr>
                 </tbody>
             </table>
@@ -129,6 +131,9 @@ export default {
             this.selectedLocationKey = null
             this.clearConfirms()
             this.$emit('data-updated')
+        },
+        priceRemoved (index) {
+            this.$emit('price-removed', this.selectedLocation, index)
         },
         createLocation () {
             if (this.createLocationName === null || this.createLocationName === '') {

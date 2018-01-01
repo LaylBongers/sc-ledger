@@ -18,6 +18,7 @@
                     :locations="locations"
                     @data-updated="dataUpdated"
                     @create-location="createLocation"
+                    @price-removed="priceRemoved"
                 />
             </div>
         </div>
@@ -101,8 +102,22 @@ export default {
                 return new Date(b.timestamp) - new Date(a.timestamp)
             })
 
-            // Now go through the list of changes in reverse and update the
-            // latest price data, so it's easily accessable
+            this.updateCurrentPrices(location)
+
+            // Save the data
+            store.save(this.locations)
+        },
+        priceRemoved (location, index) {
+            location.priceChanges.splice(index, 1)
+
+            this.updateCurrentPrices(location)
+
+            // Save the data
+            store.save(this.locations)
+        },
+        updateCurrentPrices (location) {
+            // Go through the list of changes in reverse and update the latest
+            // price data, so it's easily accessable
             for (var i = location.priceChanges.length - 1; i >= 0; i--) {
                 let change = location.priceChanges[i]
 
@@ -122,9 +137,6 @@ export default {
                     location.currentPrices[change.resource].sell = change.sell
                 }
             }
-
-            // Save the data
-            store.save(this.locations)
         },
         createLocation (name) {
             Vue.set(this.locations, name, {
