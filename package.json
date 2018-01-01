@@ -2,7 +2,7 @@
   "name": "sc-ledger",
   "version": "0.0.0",
   "author": "Layl <LaylConway@users.noreply.github.com>",
-  "description": "An electron-vue project",
+  "description": "Keeping your trade routes profitable since 2935",
   "license": null,
   "main": "./dist/electron/main.js",
   "scripts": {
