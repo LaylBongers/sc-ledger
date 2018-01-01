@@ -9,10 +9,16 @@
             <div class="col-12 col-md-6">
                 <LogPrice
                     class="mt-3"
-                    :locations="locations" :resources="resources"
+                    :locations="locations"
+                    :resources="resources"
                     @submitted="priceLogged"
                 />
-                <ViewLocation class="mt-3 mb-3" :locations="locations" />
+                <ViewLocation
+                    class="mt-3 mb-3"
+                    :locations="locations"
+                    @data-updated="dataUpdated"
+                    @create-location="createLocation"
+                />
             </div>
         </div>
     </div>
@@ -20,6 +26,7 @@
 </template>
 
 <script>
+import Vue from 'vue'
 import Store from './Store'
 
 import LogPrice from './LogPrice'
@@ -65,7 +72,13 @@ export default {
                     ],
                 },
             },
-            resources: ['Hydrogen', 'Iodine'],
+            resources: [
+                'Agricium', 'Agricultural Supplies', 'Aluminium', 'Astatine',
+                'Beryl', 'Chlorine', 'Corundum', 'Diamond', 'Distilled Spirits',
+                'Fluorine', 'Gold', 'Hydrogen', 'Iodine', 'Laranite',
+                'Medical Supplies', 'Processed Food', 'Quarts', 'Scrap',
+                'Stims', 'Titanium', 'Tungsten', 'Waste',
+            ],
         }
     },
     created () {
@@ -110,6 +123,21 @@ export default {
                 }
             }
 
+            // Save the data
+            store.save(this.locations)
+        },
+        createLocation (name) {
+            Vue.set(this.locations, name, {
+                currentPrices: {},
+                priceChanges: [],
+            })
+
+            // Save the data
+            store.save(this.locations)
+        },
+        dataUpdated () {
+            // TODO: Make this work a bit better, ViewLocation should not
+            // directly alter the location data I think
             // Save the data
             store.save(this.locations)
         }

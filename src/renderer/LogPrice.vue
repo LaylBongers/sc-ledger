@@ -5,7 +5,7 @@
         <div class="form-group">
             <label>Location</label>
             <select class="form-control" v-model="selectedLocationKey">
-                <option v-for="(location, name) in locations" :value="name">
+                <option v-for="(location, name) in locations" :value="name" :key="name">
                     {{ name }}
                 </option>
             </select>
@@ -13,7 +13,7 @@
         <div class="form-group">
             <label>Resource</label>
             <select class="form-control" v-model="workingChange.resource">
-                <option v-for="resource in resources" :value="resource">
+                <option v-for="resource in resources" :value="resource" :key="resource">
                     {{ resource }}
                 </option>
             </select>

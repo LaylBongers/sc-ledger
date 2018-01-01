@@ -11,7 +11,7 @@
                 <span class="font-weight-bold">{{ foundRoute.buyLocation }}</span>
                 to
                 <span class="font-weight-bold">{{ foundRoute.sellLocation }}</span>
-                with an earing ratio of
+                with an earning ratio of
                 <span class="font-weight-bold">{{ foundRoute.earnRatio }}.</span>
             </p>
         </div>
