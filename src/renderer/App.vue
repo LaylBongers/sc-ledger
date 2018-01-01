@@ -2,32 +2,11 @@
 <div id="app">
     <div class="container-fluid text-light">
         <div class="row">
-            <AddPriceLog @submitted="priceLogSubmitted" />
-
             <div class="col-12 col-md-6 mt-3"><h2>Lorem Ipsum</h2></div>
 
-            <div class="col-12">
-                <h2 class="mt-3">Price Logs</h2>
-                <div v-for="log in displayedPriceLogs">
-                    <h3>{{ log.location }} at {{ log.timestamp.toUTCString() }}</h3>
-                    <table class="table">
-                        <thead>
-                            <tr>
-                                <th>Resource</th>
-                                <th>Buy</th>
-                                <th>Sell</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <tr v-for="change in log.changes">
-                                <td>{{ change.resource }}</td>
-                                <td>{{ change.buy }}</td>
-                                <td>{{ change.sell }}</td>
-                            </tr>
-                        </tbody>
-                    </table>
-                </div>
-            </div>
+            <AddPriceLog @submitted="priceLogSubmitted" />
+
+            <PriceLogs :price-logs="priceLogs" />
         </div>
     </div>
 </div>
@@ -35,16 +14,13 @@
 
 <script>
 import AddPriceLog from './AddPriceLog'
+import PriceLogs from './PriceLogs'
 
 export default {
     name: 'sc-ledger',
     components: {
-        AddPriceLog
-    },
-    computed: {
-        displayedPriceLogs () {
-            return this.priceLogs.slice().reverse()
-        }
+        AddPriceLog,
+        PriceLogs,
     },
     data () {
         return {
