@@ -114,11 +114,8 @@ export default {
                 sell: buySell.sell,
             }
 
-            // And to the change and sort the list of price changes
-            location.priceChanges.push(priceChange)
-            location.priceChanges.sort(function (a, b) {
-                return new Date(b.timestamp) - new Date(a.timestamp)
-            })
+            // Send the finished price change to the parent
+            this.$emit('submitted', location, priceChange)
 
             this.workingChange = this.createEmptyChange()
         },

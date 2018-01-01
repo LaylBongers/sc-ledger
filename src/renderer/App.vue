@@ -7,7 +7,11 @@
             </div>
 
             <div class="col-12 col-md-6">
-                <LogPrice class="mt-3" :locations="locations" :resources="resources" />
+                <LogPrice
+                    class="mt-3"
+                    :locations="locations" :resources="resources"
+                    @submitted="priceLogged"
+                />
                 <ViewLocation class="mt-3 mb-3" :locations="locations" />
             </div>
         </div>
@@ -16,9 +20,13 @@
 </template>
 
 <script>
+import Store from './Store'
+
 import LogPrice from './LogPrice'
 import SearchRoutes from './SearchRoutes'
 import ViewLocation from './ViewLocation'
+
+let store = new Store()
 
 export default {
     name: 'sc-ledger',
@@ -29,7 +37,6 @@ export default {
     },
     data () {
         return {
-            priceLogs: [],
             locations: {
                 'Port Olisar': {
                     priceChanges: [
@@ -55,6 +62,19 @@ export default {
             resources: ['Hydrogen', 'Iodine'],
         }
     },
+    methods: {
+        priceLogged (location, priceChange) {
+            // And to the change and sort the list of price changes
+            this.$emit('submitted', priceChange)
+            location.priceChanges.push(priceChange)
+            location.priceChanges.sort(function (a, b) {
+                return new Date(b.timestamp) - new Date(a.timestamp)
+            })
+
+            // Save the data
+            store.save(this.locations)
+        }
+    }
 }
 </script>
 
