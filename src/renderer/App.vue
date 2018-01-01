@@ -62,6 +62,18 @@ export default {
             resources: ['Hydrogen', 'Iodine'],
         }
     },
+    created () {
+        let me = this
+
+        // Load in the data from the store
+        store.load(function (err, data) {
+            if (err) {
+                return
+            }
+
+            me.locations = data
+        })
+    },
     methods: {
         priceLogged (location, priceChange) {
             // And to the change and sort the list of price changes

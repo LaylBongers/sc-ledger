@@ -18,6 +18,19 @@ class Store {
         this.targetPath = targetPath
     }
 
+    load (callback) {
+        fs.readFile(this.targetPath, (err, data) => {
+            if (err) {
+                // Couldn't read, nothing to do here
+                console.log('Could not read locations data')
+                return
+            }
+
+            let locations = JSON.parse(data)
+            callback(null, locations)
+        })
+    }
+
     save (locations) {
         let jsonData = JSON.stringify(locations)
         let targetPath = this.targetPath
