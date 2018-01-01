@@ -1,6 +1,6 @@
 <template>
-<div>
-    <div class="card bg-dark mt-3">
+<div class="col-12 col-md-6 mt-3">
+    <div class="card bg-dark">
         <h3 class="card-header">New Price Log</h3>
         <div class="card-body">
             <div class="form-group">
@@ -24,7 +24,7 @@
                         <td>{{ change.sell }}</td>
                         <td><button class="btn btn-danger" style="width: 2.4em;" @click="removeChange(index)">-</button></td>
                     </tr>
-                    <AddPriceLogChange @submitted="addChange" />
+                    <AddPriceLogChange ref="addPlcForm" @submitted="addChange" />
                 </tbody>
             </table>
 
@@ -54,6 +54,7 @@ export default {
             this.$emit('submitted', this.priceLog)
 
             this.priceLog = this.createEmptyPriceLog()
+            this.$refs.addPlcForm.reset()
         },
         addChange (change) {
             this.priceLog.changes.push(change)
@@ -65,13 +66,7 @@ export default {
             return {
                 timestamp: null,
                 location: '',
-                changes: [
-                    {
-                        resource: 'Hydrogen',
-                        buy: 0.8,
-                        sell: null,
-                    },
-                ],
+                changes: [],
             }
         },
     },

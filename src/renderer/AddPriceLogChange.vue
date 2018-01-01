@@ -3,7 +3,13 @@
     <td><input type="text" class="form-control" v-model="workingChange.resource"></input></td>
     <td><input type="number" class="form-control" v-model="workingChange.buy"></input></td>
     <td><input type="number" class="form-control" v-model="workingChange.sell"></input></td>
-    <td><button class="btn btn-success" style="width: 2.4em;" @click="submitChange">+</button></td>
+    <td><button
+        class="btn"
+        style="width: 2.4em;"
+        :class="{ 'btn-success': buttonEnabled, 'btn-secondary': !buttonEnabled }"
+        :disabled="!buttonEnabled"
+        @click="submitChange"
+    >+</button></td>
 </tr>
 </template>
 
@@ -15,19 +21,25 @@ export default {
             workingChange: this.createEmptyWorkingChange(),
         }
     },
+    computed: {
+        buttonEnabled () {
+            let buySell = this.parseBuySell()
+            return this.workingChange.resouce !== '' &&
+                (buySell.buy !== null || buySell.sell !== null)
+        },
+    },
     methods: {
         submitChange () {
             // Convert to the format we need
-            if (this.workingChange.buy === '') {
-                this.workingChange.buy = null
-            }
-            if (this.workingChange.sell === '') {
-                this.workingChange.sell = null
-            }
+            let change = this.workingChange
+            let buySell = this.parseBuySell()
+            change.buy = buySell.buy
+            change.sell = buySell.sell
 
-            this.$emit('submitted', this.workingChange)
+            // Raise the event, we're done with this
+            this.$emit('submitted', change)
 
-            this.workingChange = this.createEmptyWorkingChange()
+            this.reset()
         },
         createEmptyWorkingChange () {
             return {
@@ -35,6 +47,22 @@ export default {
                 buy: '',
                 sell: '',
             }
+        },
+        reset () {
+            this.workingChange = this.createEmptyWorkingChange()
+        },
+        parseBuySell () {
+            let buy = parseFloat(this.workingChange.buy)
+            let sell = parseFloat(this.workingChange.sell)
+
+            if (isNaN(buy)) {
+                buy = null
+            }
+            if (isNaN(sell)) {
+                sell = null
+            }
+
+            return { buy, sell }
         },
     },
 }
