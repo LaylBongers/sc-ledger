@@ -1,15 +1,15 @@
 <template>
   <div id="app">
-    <router-view></router-view>
+      <h1>Ledger</h1>
   </div>
 </template>
 
 <script>
-  export default {
+export default {
     name: 'sc-ledger'
-  }
+}
 </script>
 
 <style>
-  /* CSS */
+@import '~bootstrap/dist/css/bootstrap.css';
 </style>
