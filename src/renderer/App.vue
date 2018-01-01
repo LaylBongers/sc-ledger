@@ -2,11 +2,21 @@
 <div id="app">
     <div class="container-fluid text-light">
         <div class="row">
-            <div class="col-12 col-md-6 mt-3"><h2>Lorem Ipsum</h2></div>
+            <div class="col-12 col-md-6">
+                <SearchRoutes class="mt-3" />
+            </div>
 
-            <AddPriceLog @submitted="priceLogSubmitted" />
+            <div class="col-12 col-md-6">
+                <AddPriceLog class="mt-3"
+                    :locations="locations"
+                    @submitted="priceLogSubmitted"
+                />
+                <ViewLocation class="mt-3" :locations="locations" />
+            </div>
 
-            <PriceLogs :price-logs="priceLogs" />
+            <div class="col-12">
+                <PriceLogs :price-logs="priceLogs" />
+            </div>
         </div>
     </div>
 </div>
@@ -15,12 +25,16 @@
 <script>
 import AddPriceLog from './AddPriceLog'
 import PriceLogs from './PriceLogs'
+import SearchRoutes from './SearchRoutes'
+import ViewLocation from './ViewLocation'
 
 export default {
     name: 'sc-ledger',
     components: {
         AddPriceLog,
         PriceLogs,
+        SearchRoutes,
+        ViewLocation,
     },
     data () {
         return {
@@ -47,6 +61,10 @@ export default {
                     ],
                 }
             ],
+            locations: [
+                'Port Olisar',
+                'Grim HEX',
+            ],
         }
     },
     methods: {
@@ -63,5 +81,4 @@ export default {
 body {
     background-color: #202024;
 }
-
 </style>

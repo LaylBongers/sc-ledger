@@ -1,5 +1,5 @@
 <template>
-<div class="col-12">
+<div>
     <h2 class="mt-3">Price Logs</h2>
     <div v-for="log in displayedPriceLogs">
         <h3>{{ log.location }} at {{ log.timestamp.toUTCString() }}</h3>
