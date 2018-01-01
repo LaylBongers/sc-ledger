@@ -3,7 +3,7 @@
     <div class="container-fluid text-light">
         <div class="row">
             <div class="col-12 col-md-6">
-                <SearchRoutes class="mt-3" />
+                <SearchRoutes class="mt-3" :locations="locations" />
             </div>
 
             <div class="col-12 col-md-6">
@@ -39,6 +39,9 @@ export default {
         return {
             locations: {
                 'Port Olisar': {
+                    currentPrices: {
+                        'Hydrogen': { buy: 0.8, sell: null }
+                    },
                     priceChanges: [
                         {
                             timestamp: new Date(),
@@ -49,6 +52,9 @@ export default {
                     ],
                 },
                 'Grim HEX': {
+                    currentPrices: {
+                        'Hydrogen': { buy: null, sell: 1.0 }
+                    },
                     priceChanges: [
                         {
                             timestamp: new Date(),
@@ -76,12 +82,33 @@ export default {
     },
     methods: {
         priceLogged (location, priceChange) {
-            // And to the change and sort the list of price changes
-            this.$emit('submitted', priceChange)
+            // Add the change and sort the list of price changes
             location.priceChanges.push(priceChange)
             location.priceChanges.sort(function (a, b) {
                 return new Date(b.timestamp) - new Date(a.timestamp)
             })
+
+            // Now go through the list of changes in reverse and update the
+            // latest price data, so it's easily accessable
+            for (var i = location.priceChanges.length - 1; i >= 0; i--) {
+                let change = location.priceChanges[i]
+
+                // If there's no entry for this resource yet, add it
+                if (!(change.resource in location.currentPrices)) {
+                    location.currentPrices[change.resource] = {
+                        buy: null,
+                        sell: null,
+                    }
+                }
+
+                // Update the prices that have changed
+                if (change.buy !== null) {
+                    location.currentPrices[change.resource].buy = change.buy
+                }
+                if (change.sell !== null) {
+                    location.currentPrices[change.resource].sell = change.sell
+                }
+            }
 
             // Save the data
             store.save(this.locations)

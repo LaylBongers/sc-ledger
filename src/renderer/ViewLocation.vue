@@ -8,6 +8,25 @@
             </option>
         </select>
         <div class="mt-3" v-if="selectedLocation != null">
+            <h4>Prices</h4>
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th scope="col">Resource</th>
+                        <th scope="col">Buy</th>
+                        <th scope="col">Sell</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr v-for="(prices, key) in selectedLocation.currentPrices">
+                        <td>{{ key }}</td>
+                        <td>{{ prices.buy }}</td>
+                        <td>{{ prices.sell }}</td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <h4>Price Changes</h4>
             <table class="table">
                 <thead>
                     <tr>
@@ -18,11 +37,11 @@
                     </tr>
                 </thead>
                 <tbody>
-                    <tr v-for="priceChange in selectedLocation.priceChanges">
-                        <td><timeago :since="priceChange.timestamp" /></td>
-                        <td>{{ priceChange.resource }}</td>
-                        <td>{{ priceChange.buy }}</td>
-                        <td>{{ priceChange.sell }}</td>
+                    <tr v-for="change in selectedLocation.priceChanges">
+                        <td><timeago :since="change.timestamp" /></td>
+                        <td>{{ change.resource }}</td>
+                        <td>{{ change.buy }}</td>
+                        <td>{{ change.sell }}</td>
                     </tr>
                 </tbody>
             </table>
