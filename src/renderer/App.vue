@@ -45,34 +45,7 @@ export default {
     },
     data () {
         return {
-            locations: {
-                'Port Olisar': {
-                    currentPrices: {
-                        'Hydrogen': { buy: 0.8, sell: null }
-                    },
-                    priceChanges: [
-                        {
-                            timestamp: new Date(),
-                            resource: 'Hydrogen',
-                            buy: 0.8,
-                            sell: null,
-                        },
-                    ],
-                },
-                'Grim HEX': {
-                    currentPrices: {
-                        'Hydrogen': { buy: null, sell: 1.0 }
-                    },
-                    priceChanges: [
-                        {
-                            timestamp: new Date(),
-                            resource: 'Hydrogen',
-                            buy: null,
-                            sell: 1.0,
-                        },
-                    ],
-                },
-            },
+            locations: store.load(),
             resources: [
                 'Agricium', 'Agricultural Supplies', 'Aluminium', 'Astatine',
                 'Beryl', 'Chlorine', 'Corundum', 'Diamond', 'Distilled Spirits',
@@ -81,18 +54,6 @@ export default {
                 'Stims', 'Titanium', 'Tungsten', 'Waste',
             ],
         }
-    },
-    created () {
-        let me = this
-
-        // Load in the data from the store
-        store.load(function (err, data) {
-            if (err) {
-                return
-            }
-
-            me.locations = data
-        })
     },
     methods: {
         priceLogged (location, priceChange) {

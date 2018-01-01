@@ -22,23 +22,34 @@ class Store {
         let me = this
         let targetPath = this.targetPath
 
-        fs.readFile(targetPath, (err, data) => {
-            if (err) {
-                // Couldn't read the file, use the seed data instead and write
-                // that to a new file
-                let locations = require('./SeedLocations.json')
-                me.save(locations)
-                callback(null, locations)
-                return
-            }
+        // I'm aware this isn't the greatest but readFile wasn't calling the
+        // callback for some reason
+        try {
+            let data = fs.readFileSync(targetPath)
 
             let locations = JSON.parse(data)
             console.log('Loaded locations from ' + targetPath)
-            callback(null, locations)
-        })
+
+            return locations
+        } catch (err) {
+            // Couldn't read the file, use the seed data instead and write
+            // that to a new file
+            console.log('Could not load locations, creating seed file')
+
+            let locations = require('./SeedLocations.json')
+            me.save(locations)
+
+            return locations
+        }
     }
 
     save (locations) {
+        // Make sure something hasn't gone horribly wrong
+        // Who needs to save an empty locations file anyways?
+        if (Object.keys(locations).length === 0) {
+            return
+        }
+
         let jsonData = JSON.stringify(locations)
         let targetPath = this.targetPath
 
