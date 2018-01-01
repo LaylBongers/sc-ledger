@@ -24,12 +24,7 @@
                         <td>{{ change.sell }}</td>
                         <td><button class="btn btn-danger" style="width: 2.4em;" @click="removeChange(index)">-</button></td>
                     </tr>
-                    <tr>
-                        <td><input type="text" class="form-control" v-model="workingChange.resource"></input></td>
-                        <td><input type="number" class="form-control" v-model="workingChange.buy"></input></td>
-                        <td><input type="number" class="form-control" v-model="workingChange.sell"></input></td>
-                        <td><button class="btn btn-success" style="width: 2.4em;" @click="addChange">+</button></td>
-                    </tr>
+                    <AddPriceLogChange @submitted="addChange" />
                 </tbody>
             </table>
 
@@ -40,12 +35,16 @@
 </template>
 
 <script>
+import AddPriceLogChange from './AddPriceLogChange'
+
 export default {
     name: 'add-price-log',
+    components: {
+        AddPriceLogChange
+    },
     data () {
         return {
             priceLog: this.createEmptyPriceLog(),
-            workingChange: this.createEmptyWorkingChange(),
         }
     },
     methods: {
@@ -55,19 +54,9 @@ export default {
             this.$emit('submitted', this.priceLog)
 
             this.priceLog = this.createEmptyPriceLog()
-            this.workingChange = this.createEmptyWorkingChange()
         },
-        addChange () {
-            if (this.workingChange.buy === '') {
-                this.workingChange.buy = null
-            }
-            if (this.workingChange.sell === '') {
-                this.workingChange.sell = null
-            }
-
-            this.priceLog.changes.push(this.workingChange)
-
-            this.workingChange = this.createEmptyWorkingChange()
+        addChange (change) {
+            this.priceLog.changes.push(change)
         },
         removeChange (index) {
             this.priceLog.changes.splice(index, 1)
@@ -83,13 +72,6 @@ export default {
                         sell: null,
                     },
                 ],
-            }
-        },
-        createEmptyWorkingChange () {
-            return {
-                resource: '',
-                buy: '',
-                sell: '',
             }
         },
     },
