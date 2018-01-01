@@ -7,15 +7,8 @@
             </div>
 
             <div class="col-12 col-md-6">
-                <AddPriceLog class="mt-3"
-                    :locations="locations"
-                    @submitted="priceLogSubmitted"
-                />
-                <ViewLocation class="mt-3" :locations="locations" />
-            </div>
-
-            <div class="col-12">
-                <PriceLogs :price-logs="priceLogs" />
+                <LogPrice class="mt-3" :locations="locations" :resources="resources" />
+                <ViewLocation class="mt-3 mb-3" :locations="locations" />
             </div>
         </div>
     </div>
@@ -23,55 +16,45 @@
 </template>
 
 <script>
-import AddPriceLog from './AddPriceLog'
-import PriceLogs from './PriceLogs'
+import LogPrice from './LogPrice'
 import SearchRoutes from './SearchRoutes'
 import ViewLocation from './ViewLocation'
 
 export default {
     name: 'sc-ledger',
     components: {
-        AddPriceLog,
-        PriceLogs,
+        LogPrice,
         SearchRoutes,
         ViewLocation,
     },
     data () {
         return {
-            priceLogs: [
-                {
-                    timestamp: new Date(),
-                    location: 'Port Olisar',
-                    changes: [
+            priceLogs: [],
+            locations: {
+                'Port Olisar': {
+                    priceChanges: [
                         {
+                            timestamp: new Date(),
                             resource: 'Hydrogen',
                             buy: 0.8,
                             sell: null,
                         },
                     ],
-                }, {
-                    timestamp: new Date(),
-                    location: 'Grim HEX',
-                    changes: [
+                },
+                'Grim HEX': {
+                    priceChanges: [
                         {
+                            timestamp: new Date(),
                             resource: 'Hydrogen',
                             buy: null,
                             sell: 1.0,
                         },
                     ],
-                }
-            ],
-            locations: [
-                'Port Olisar',
-                'Grim HEX',
-            ],
+                },
+            },
+            resources: ['Hydrogen', 'Iodine'],
         }
     },
-    methods: {
-        priceLogSubmitted (priceLog) {
-            this.priceLogs.push(priceLog)
-        }
-    }
 }
 </script>
 
