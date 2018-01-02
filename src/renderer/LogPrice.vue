@@ -31,11 +31,16 @@
                 </div>
                 <div class="col">
                     <label>For</label>
-                    <input
-                        type="number"
-                        class="form-control"
-                        v-model="workingChange.buyFor"
-                    ></input>
+                    <div class="input-group">
+                        <input
+                            type="number"
+                            class="form-control"
+                            v-model="workingChange.buyFor"
+                        ></input>
+                        <div class="input-group-append">
+                            <div class="input-group-text">UEC</div>
+                        </div>
+                    </div>
                 </div>
             </div>
             <p class="font-italic" v-if="buyPrice != null">Total: {{ buyPrice.toFixed(2) }} UEC/Unit</p>
@@ -54,11 +59,16 @@
                 </div>
                 <div class="col">
                     <label>For</label>
-                    <input
-                        type="number"
-                        class="form-control"
-                        v-model="workingChange.sellFor"
-                    ></input>
+                    <div class="input-group">
+                        <input
+                            type="number"
+                            class="form-control"
+                            v-model="workingChange.sellFor"
+                        ></input>
+                        <div class="input-group-append">
+                            <div class="input-group-text">UEC</div>
+                        </div>
+                    </div>
                 </div>
             </div>
             <p class="font-italic" v-if="sellPrice != null">Total: {{ sellPrice.toFixed(2) }} UEC/Unit</p>

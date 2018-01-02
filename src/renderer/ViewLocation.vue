@@ -43,7 +43,7 @@
                         <td>{{ change.resource }}</td>
                         <td><span v-if="change.buy != null">{{ change.buy.toFixed(2) }}</span></td>
                         <td><span v-if="change.sell != null">{{ change.sell.toFixed(2) }}</span></td>
-                        <td><button class="btn btn-danger btn-sm" @click="priceRemoved(index)">-</button></td>
+                        <td><button class="btn btn-danger btn-sm oi oi-trash" @click="priceRemoved(index)"></button></td>
                     </tr>
                 </tbody>
             </table>

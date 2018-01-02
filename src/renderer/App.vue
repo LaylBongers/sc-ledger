@@ -120,6 +120,7 @@ export default {
 
 <style>
 @import '~bootstrap/dist/css/bootstrap.css';
+@import '~open-iconic/font/css/open-iconic-bootstrap.css';
 
 body {
     background-color: #202024;
