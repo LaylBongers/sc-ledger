@@ -38,7 +38,7 @@
                     ></input>
                 </div>
             </div>
-            <p class="font-italic" v-if="buyPrice != null">Total: {{ buyPrice }} UEC/Unit</p>
+            <p class="font-italic" v-if="buyPrice != null">Total: {{ buyPrice.toFixed(2) }} UEC/Unit</p>
             <p class="font-italic" v-else>Total: N/A</p>
         </div>
         <div class="form-group">
@@ -61,7 +61,7 @@
                     ></input>
                 </div>
             </div>
-            <p class="font-italic" v-if="sellPrice != null">Total: {{ sellPrice }} UEC/Unit</p>
+            <p class="font-italic" v-if="sellPrice != null">Total: {{ sellPrice.toFixed(2) }} UEC/Unit</p>
             <p class="font-italic" v-else>Total: N/A</p>
         </div>
 

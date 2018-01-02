@@ -20,8 +20,8 @@
                 <tbody>
                     <tr v-for="(prices, key) in selectedLocation.currentPrices">
                         <td>{{ key }}</td>
-                        <td>{{ prices.buy }}</td>
-                        <td>{{ prices.sell }}</td>
+                        <td><span v-if="prices.buy != null">{{ prices.buy.toFixed(2) }}</span></td>
+                        <td><span v-if="prices.sell != null">{{ prices.sell.toFixed(2) }}</span></td>
                     </tr>
                 </tbody>
             </table>
@@ -41,8 +41,8 @@
                     <tr v-for="(change, index) in selectedLocation.priceChanges">
                         <td><timeago :since="change.timestamp" /></td>
                         <td>{{ change.resource }}</td>
-                        <td>{{ change.buy }}</td>
-                        <td>{{ change.sell }}</td>
+                        <td><span v-if="change.buy != null">{{ change.buy.toFixed(2) }}</span></td>
+                        <td><span v-if="change.sell != null">{{ change.sell.toFixed(2) }}</span></td>
                         <td><button class="btn btn-danger btn-sm" @click="priceRemoved(index)">-</button></td>
                     </tr>
                 </tbody>

@@ -12,7 +12,7 @@
                 to
                 <span class="font-weight-bold">{{ foundRoute.sellLocation }}</span>
                 with an earning ratio of
-                <span class="font-weight-bold">{{ foundRoute.earnRatio }}.</span>
+                <span class="font-weight-bold">{{ foundRoute.earnRatio.toFixed(2) }}.</span>
             </p>
         </div>
         <div class="mt-3" v-if="failed">
@@ -91,7 +91,7 @@ export default {
                     buyLocation: bestBuyLocationKey,
                     sellLocation: bestSellLocationKey,
                     resource: bestResource,
-                    earnRatio: bestEarnRatio.toFixed(2),
+                    earnRatio: bestEarnRatio,
                 }
             } else {
                 this.failed = true
