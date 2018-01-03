@@ -19,7 +19,7 @@
             </select>
         </div>
         <div class="form-group">
-            <label>Buy Price</label>
+            <label>Purchase Price</label>
             <div class="form-row">
                 <div class="col">
                     <label>Amount</label>
