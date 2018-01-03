@@ -3,17 +3,27 @@
     <h3 class="card-header">Search Routes</h3>
     <div class="card-body">
         <button class="btn btn-primary" @click="search">Search Best Route</button>
-        <div class="mt-3" v-if="foundRoute != null">
-            <h4>Found Route</h4>
-            <p>Haul
-                <span class="font-weight-bold">{{ foundRoute.resource }}</span>
-                from
-                <span class="font-weight-bold">{{ foundRoute.buyLocation }}</span>
-                to
-                <span class="font-weight-bold">{{ foundRoute.sellLocation }}</span>
-                with an earning ratio of
-                <span class="font-weight-bold">{{ foundRoute.earnRatio.toFixed(2) }}.</span>
-            </p>
+        <div class="mt-3" v-if="foundRoutes != null">
+            <h4 v-if="foundRoutes.length == 1">Found Route</h4>
+            <h4 v-else>Found Routes</h4>
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th scope="col">Resource</th>
+                        <th scope="col">From</th>
+                        <th scope="col">To</th>
+                        <th scope="col">Ratio</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr v-for="route in foundRoutes">
+                        <td>{{ route.resource }}</td>
+                        <td>{{ route.buyLocation }}</td>
+                        <td>{{ route.sellLocation }}</td>
+                        <td>{{ route.earnRatio.toFixed(2) }}</td>
+                    </tr>
+                </tbody>
+            </table>
         </div>
         <div class="mt-3" v-if="failed">
             <h4>Failed to Find a Route</h4>
@@ -28,7 +38,7 @@ export default {
     props: ['locations'],
     data () {
         return {
-            foundRoute: null,
+            foundRoutes: null,
             failed: false,
         }
     },
@@ -36,11 +46,7 @@ export default {
         search () {
             this.failed = false
 
-            let bestBuyLocationKey = null
-            let bestSellLocationKey = null
-            let bestResource = null
-            // Earn ratio starts at 1.0 because we don't want to lose money
-            let bestEarnRatio = 1.0
+            let bestRoutes = []
 
             // Iterate over all the locations and their resources
             for (let buyLocationKey in this.locations) {
@@ -70,15 +76,39 @@ export default {
                                 continue
                             }
 
-                            // Now that we've got a buy-sell combo, check if
-                            // it's a better one than what we have
+                            // This earn ratio is what we use to be determine
+                            // how good this route is
                             let earnRatio = sellPrice / buyPrice
-                            if (earnRatio > bestEarnRatio) {
-                                // We've got something better, track it
-                                bestBuyLocationKey = buyLocationKey
-                                bestSellLocationKey = sellLocationKey
-                                bestResource = buyResource
-                                bestEarnRatio = earnRatio
+                            if (earnRatio <= 1.0) {
+                                // 1.0 or less doesn't give us anything
+                                continue
+                            }
+
+                            let newRoute = {
+                                resource: buyResource,
+                                buyLocation: buyLocationKey,
+                                sellLocation: sellLocationKey,
+                                earnRatio: earnRatio,
+                            }
+
+                            // Now that we've got a buy-sell combo, we need to
+                            // see where it fits in in the list, start by seeing
+                            // if we just have free slots
+                            if (bestRoutes.length < 10) {
+                                bestRoutes.push(newRoute)
+                                bestRoutes.sort(function (a, b) {
+                                    return b.earnRatio - a.earnRatio
+                                })
+                                continue
+                            }
+
+                            // We don't have empty slots, see if the lowest slot
+                            // is worse than what we have, if so replace it
+                            if (bestRoutes[9].earnRatio < newRoute.earnRatio) {
+                                bestRoutes[9] = newRoute
+                                bestRoutes.sort(function (a, b) {
+                                    return b.earnRatio - a.earnRatio
+                                })
                             }
                         }
                     }
@@ -86,13 +116,8 @@ export default {
             }
 
             // Now that we're done, store what we found
-            if (bestResource !== null) {
-                this.foundRoute = {
-                    buyLocation: bestBuyLocationKey,
-                    sellLocation: bestSellLocationKey,
-                    resource: bestResource,
-                    earnRatio: bestEarnRatio,
-                }
+            if (bestRoutes.length !== 0) {
+                this.foundRoutes = bestRoutes
             } else {
                 this.failed = true
             }
