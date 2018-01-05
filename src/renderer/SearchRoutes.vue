@@ -18,8 +18,14 @@
                 <tbody>
                     <tr v-for="route in foundRoutes">
                         <td>{{ route.resource }}</td>
-                        <td>{{ route.buyLocation }}</td>
-                        <td>{{ route.sellLocation }}</td>
+                        <td>
+                            <span class="font-italic">{{ route.buyLocation }}</span>
+                            <br />for {{ route.buyPrice.toFixed(2) }}
+                        </td>
+                        <td>
+                            <span class="font-italic">{{ route.sellLocation }}</span>
+                            <br />for {{ route.sellPrice.toFixed(2) }}
+                        </td>
                         <td>{{ route.earnRatio.toFixed(2) }}</td>
                     </tr>
                 </tbody>
@@ -87,7 +93,9 @@ export default {
                             let newRoute = {
                                 resource: buyResource,
                                 buyLocation: buyLocationKey,
+                                buyPrice: buyPrice,
                                 sellLocation: sellLocationKey,
+                                sellPrice: sellPrice,
                                 earnRatio: earnRatio,
                             }
 
